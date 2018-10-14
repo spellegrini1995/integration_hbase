@@ -6,11 +6,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.KeyValue;
-import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Result;
 
 public class HbaseConnector {
 	public static void main(String[] argv) throws Exception{
@@ -23,7 +19,7 @@ public class HbaseConnector {
 		HBaseConfiguration hc = new HBaseConfiguration(new Configuration());
 
 		//inizializzo la tabella
-		HTableDescriptor ht = new HTableDescriptor("dia");
+		HTableDescriptor ht = new HTableDescriptor(tableName);
 
 		//inizializzo le family
 		ht.addFamily(new HColumnDescriptor(family[0]));
@@ -51,17 +47,17 @@ public class HbaseConnector {
 		hbw.addRecord(tableName, rowKey1, family[0], "Reti", "Marco");
 		
 		//query
-		
+		RowBean rb = new RowBean();
 		//tutte le persone in informatica
-		hbw.getAllFamilyRecord(tableName, rowKey1, family[0]);		
+		rb = hbw.getAllFamilyRecord(tableName, rowKey1, family[0]);		
 		
 		//tutte le persone in automazione
-		hbw.getAllFamilyRecord(tableName, rowKey1, family[1]);
+		rb = hbw.getAllFamilyRecord(tableName, rowKey1, family[1]);
 		
 		//tutte le persone in informatica nel gruppo di basi di dati
-		hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "BD");	
+		rb = hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "BD");	
 		
 		//tutte le persone in automazione del gruppo di ricerca operativa
-		hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "RO");	
+		rb = hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "RO");	
 	}
 }
