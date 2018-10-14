@@ -49,15 +49,20 @@ public class HbaseConnector {
 		//query
 		RowBean rb = new RowBean();
 		//tutte le persone in informatica
-		rb = hbw.getAllFamilyRecord(tableName, rowKey1, family[0]);		
+		rb = hbw.getAllFamilyRecord(tableName, rowKey1, family[0]);	
+		System.out.println("Tutte le persone di informatica: "+rb);
 		
 		//tutte le persone in automazione
 		rb = hbw.getAllFamilyRecord(tableName, rowKey1, family[1]);
-		
+		System.out.println("Tutte le persone di automazione: "+rb);
+
 		//tutte le persone in informatica nel gruppo di basi di dati
 		rb = hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "BD");	
-		
+		System.out.println("Tutte le persone del gruppo di ricerca BD: "+rb);
+
 		//tutte le persone in automazione del gruppo di ricerca operativa
 		rb = hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "RO");	
+		System.out.println("Tutte le persone del gruppo di ricerca RO: "+rb);
+
 	}
 }
