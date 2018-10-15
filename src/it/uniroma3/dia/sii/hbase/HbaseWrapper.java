@@ -43,32 +43,26 @@ public class HbaseWrapper {
 		return rb;
 	}
 
-	public RowBean getAllFamilyRecord(String tableName, String rowKey, String family) throws IOException{
+	public void getAllFamilyRecord(String tableName, String rowKey, String family) throws IOException{
 		HTable ht = new HTable(hc, tableName);
-		Get get = new Get(rowKey.getBytes());
-		get.addFamily(family.getBytes());
-		Result rs = ht.get(get);
-		RowBean rb = new RowBean(tableName, rowKey); 		
-		for(KeyValue kv : rs.raw()){
-			rb.addRowContent((new String(kv.getFamily())), (new String(kv.getQualifier())), 
-					(new String(kv.getValue())));
+		Scan scan = new Scan();
+		scan.addFamily(family.getBytes());
+		ResultScanner scanner = ht.getScanner(scan);
+		for (Result result : scanner) {
+			System.out.println("Trovate righe: " + result);
 		}
-		ht.close();
-		return rb;
+		scanner.close();
 	}
 
-	public RowBean getAllQualifierRecord(String tableName, String rowKey, String family, String qualifier) throws IOException{
+	public void getAllQualifierRecord(String tableName, String rowKey, String family, String qualifier) throws IOException{
 		HTable ht = new HTable(hc, tableName);
-		Get get = new Get(rowKey.getBytes());
-		get.addColumn(family.getBytes(), qualifier.getBytes());
-		Result rs = ht.get(get);
-		RowBean rb = new RowBean(tableName, rowKey); 		
-		for(KeyValue kv : rs.raw()){
-			rb.addRowContent((new String(kv.getFamily())), (new String(kv.getQualifier())), 
-					(new String(kv.getValue())));
+		Scan scan = new Scan();
+		scan.addColumn(family.getBytes(), qualifier.getBytes());
+		ResultScanner scanner = ht.getScanner(scan);
+		for (Result result : scanner) {
+			System.out.println("Trovate righe: " + result);
 		}
-		ht.close();
-		return rb;
+		scanner.close();
 	}
 
 	public void delRecord(String tableName, String rowKey) throws Exception{

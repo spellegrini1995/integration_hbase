@@ -47,22 +47,21 @@ public class HbaseConnector {
 		hbw.addRecord(tableName, rowKey1, family[0], "Reti", "Marco");
 		
 		//query
-		RowBean rb = new RowBean();
 		//tutte le persone in informatica
-		rb = hbw.getAllFamilyRecord(tableName, rowKey1, family[0]);	
-		System.out.println("Tutte le persone di informatica: "+rb);
+		System.out.println("Tutte le persone di informatica");
+		hbw.getAllFamilyRecord(tableName, rowKey1, family[0]);	
 		
 		//tutte le persone in automazione
-		rb = hbw.getAllFamilyRecord(tableName, rowKey1, family[1]);
-		System.out.println("Tutte le persone di automazione: "+rb);
+		System.out.println("Tutte le persone di automazione");
+		hbw.getAllFamilyRecord(tableName, rowKey1, family[1]);
 
 		//tutte le persone in informatica nel gruppo di basi di dati
-		rb = hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "BD");	
-		System.out.println("Tutte le persone del gruppo di ricerca BD: "+rb);
+		System.out.println("Tutte le persone del gruppo di ricerca BD");
+		hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "BD");	
 
 		//tutte le persone in automazione del gruppo di ricerca operativa
-		rb = hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "RO");	
-		System.out.println("Tutte le persone del gruppo di ricerca RO: "+rb);
+		System.out.println("Tutte le persone del gruppo di ricerca RO");
+		hbw.getAllQualifierRecord(tableName, rowKey1, family[0], "RO");	
 
 	}
 }
