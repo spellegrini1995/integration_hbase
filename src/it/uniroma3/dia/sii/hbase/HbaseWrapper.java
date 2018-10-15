@@ -10,6 +10,8 @@ import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.KeyValue;
 
 public class HbaseWrapper {
@@ -44,12 +46,12 @@ public class HbaseWrapper {
 	public RowBean getAllFamilyRecord(String tableName, String rowKey, String family) throws IOException{
 		HTable ht = new HTable(hc, tableName);
 		Get get = new Get(rowKey.getBytes());
+		get.addFamily(family.getBytes());
 		Result rs = ht.get(get);
 		RowBean rb = new RowBean(tableName, rowKey); 		
 		for(KeyValue kv : rs.raw()){
-			if(kv.getFamily()==family.getBytes()){
-				rb.addRowContent((new String(kv.getFamily())), (new String(kv.getQualifier())), 
-						(new String(kv.getValue()))); }
+			rb.addRowContent((new String(kv.getFamily())), (new String(kv.getQualifier())), 
+					(new String(kv.getValue())));
 		}
 		ht.close();
 		return rb;
@@ -58,12 +60,12 @@ public class HbaseWrapper {
 	public RowBean getAllQualifierRecord(String tableName, String rowKey, String family, String qualifier) throws IOException{
 		HTable ht = new HTable(hc, tableName);
 		Get get = new Get(rowKey.getBytes());
+		get.addColumn(family.getBytes(), qualifier.getBytes());
 		Result rs = ht.get(get);
 		RowBean rb = new RowBean(tableName, rowKey); 		
 		for(KeyValue kv : rs.raw()){
-			if(kv.getFamily()==family.getBytes() && kv.getQualifier()==qualifier.getBytes()){
-				rb.addRowContent((new String(kv.getFamily())), (new String(kv.getQualifier())), 
-						(new String(kv.getValue()))); }
+			rb.addRowContent((new String(kv.getFamily())), (new String(kv.getQualifier())), 
+					(new String(kv.getValue())));
 		}
 		ht.close();
 		return rb;
