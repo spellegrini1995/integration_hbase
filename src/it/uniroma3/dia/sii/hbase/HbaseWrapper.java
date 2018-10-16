@@ -12,6 +12,11 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
+import org.apache.hadoop.hbase.filter.FamilyFilter;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.KeyValue;
 
@@ -44,28 +49,30 @@ public class HbaseWrapper {
 		return rb;
 	}
 
-	public void getAllFamilyRecord(String tableName, String rowKey, String family) throws IOException{
+	public void getAllFamilyRecord(String tableName, String family) throws IOException{
 		HTable ht = new HTable(hc, tableName);
 		Scan scan = new Scan();
 		scan.addFamily(Bytes.toBytes(family));
+		//Filter filter= new FamilyFilter(CompareOp.LESS_OR_EQUAL,new BinaryComparator(Bytes.toBytes(rowKey)));
 		ResultScanner scanner = ht.getScanner(scan);
 		try {
 			for (Result result : scanner) {
-				System.out.println("Trovate righe: " + result);
+				System.out.println("Trovate righe: " + new String(result.value()));
 			}
 		} finally {
 			scanner.close();
 		}
 	}
 
-	public void getAllQualifierRecord(String tableName, String rowKey, String family, String qualifier) throws IOException{
+	public void getAllQualifierRecord(String tableName, String family, String qualifier) throws IOException{
 		HTable ht = new HTable(hc, tableName);
 		Scan scan = new Scan();
 		scan.addColumn(Bytes.toBytes(family), Bytes.toBytes(qualifier));
+		//Filter filter= new FamilyFilter(CompareOp.LESS_OR_EQUAL,new BinaryComparator(Bytes.toBytes(rowKey)));
 		ResultScanner scanner = ht.getScanner(scan);
 		try {
 			for (Result result : scanner) {
-				System.out.println("Trovate righe: " + result);
+				System.out.println("Trovate righe: " + new String(result.value()));
 			}
 		} finally {
 			scanner.close();
