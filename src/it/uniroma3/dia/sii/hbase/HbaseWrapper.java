@@ -12,6 +12,7 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.KeyValue;
 
 public class HbaseWrapper {
@@ -27,7 +28,7 @@ public class HbaseWrapper {
 		put.add(family.getBytes(), qualifier.getBytes(), value.getBytes());
 		ht.put(put);
 		ht.close();
-		System.out.println("Aggiunti record " + tableName + " " + rowKey + " " + family + ":" + qualifier + " " + value);
+		System.out.println("Aggiunto record " + tableName + " " + rowKey + " " + family + ":" + qualifier + " " + value);
 	}
 
 	public RowBean getOneRecord(String tableName, String rowKey) throws IOException{
@@ -46,23 +47,29 @@ public class HbaseWrapper {
 	public void getAllFamilyRecord(String tableName, String rowKey, String family) throws IOException{
 		HTable ht = new HTable(hc, tableName);
 		Scan scan = new Scan();
-		scan.addFamily(family.getBytes());
+		scan.addFamily(Bytes.toBytes(family));
 		ResultScanner scanner = ht.getScanner(scan);
-		for (Result result : scanner) {
-			System.out.println("Trovate righe: " + result);
+		try {
+			for (Result result : scanner) {
+				System.out.println("Trovate righe: " + result);
+			}
+		} finally {
+			scanner.close();
 		}
-		scanner.close();
 	}
 
 	public void getAllQualifierRecord(String tableName, String rowKey, String family, String qualifier) throws IOException{
 		HTable ht = new HTable(hc, tableName);
 		Scan scan = new Scan();
-		scan.addColumn(family.getBytes(), qualifier.getBytes());
+		scan.addColumn(Bytes.toBytes(family), Bytes.toBytes(qualifier));
 		ResultScanner scanner = ht.getScanner(scan);
-		for (Result result : scanner) {
-			System.out.println("Trovate righe: " + result);
+		try {
+			for (Result result : scanner) {
+				System.out.println("Trovate righe: " + result);
+			}
+		} finally {
+			scanner.close();
 		}
-		scanner.close();
 	}
 
 	public void delRecord(String tableName, String rowKey) throws Exception{
